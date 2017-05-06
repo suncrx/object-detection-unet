@@ -1,0 +1,8 @@
+https://arxiv.org/abs/1511.06811
+https://www.mapillary.com/dataset/vistas
+https://chatbotslife.com/small-u-net-for-vehicle-detection-9eec216f9fd6
+https://chatbotslife.com/towards-a-real-time-vehicle-detection-ssd-multibox-approach-2519af2751c
+https://github.com/udacity/self-driving-car/tree/master/vehicle-detection/u-net
+https://medium.com/intuitionmachine/navigating-the-unsupervised-learning-landscape-951bd5842df9
+
+

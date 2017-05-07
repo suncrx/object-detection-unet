@@ -2,7 +2,7 @@
 
 import tensorflow as tf
 from keras.optimizers import Adam
-from keras.callbacks import ModelCheckpoint, EarlyStopping, ProgbarLogger
+from keras.callbacks import ModelCheckpoint, EarlyStopping, CSVLogger
 import os
 import sys
 import time
@@ -23,7 +23,7 @@ def train_model(batch_size, model_filepath, csv_filepath, min_delta, patience, t
 
 	batch = next(train_generator)
 	image_shape = batch[0][0].shape
-	segments = batch[1][0].shape[0]
+	segments = batch[1][0].shape[2]
 
 	if is_test:
 		model = unet_test_model(image_shape, segments)
@@ -32,15 +32,16 @@ def train_model(batch_size, model_filepath, csv_filepath, min_delta, patience, t
 
 	checkpoint = ModelCheckpoint(model_filepath, verbose=1, save_best_only=True)
 	earlystop = EarlyStopping(min_delta=min_delta, patience=patience, verbose=1)
-	progbar = ProgbarLogger(count_mode='steps')
 	logger = CSVLogger(csv_filepath)
 
 	model.compile(optimizer=Adam(lr=1e-4), loss=IOU_calc_loss, metrics=[IOU_calc])
 
-	model.fit_generator(training_gen, 
+	print("Compiled model!")
+
+	model.fit_generator(train_generator, 
 		steps_per_epoch=train_size, 
 		epochs=epochs,
-		callbacks=[checkpoint, earlystop, progbar, logger], 
+		callbacks=[checkpoint, earlystop, logger], 
 		validation_data=test_generator, 
 		validation_steps=validation_size,
 		verbose=0)

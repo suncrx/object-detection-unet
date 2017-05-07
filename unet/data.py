@@ -39,7 +39,7 @@ def generator(image_factories, batch_size):
 	image = image_obj.image
 	mask = image_obj.image_mask()
 	batch_images = np.zeros((batch_size, image.shape[0], image.shape[1], image.shape[2]))
-	batch_masks = np.zeros((batch_size, mask.shape[0], image.shape[0], image.shape[1], 1))
+	batch_masks = np.zeros((batch_size, mask.shape[0], mask.shape[1], mask.shape[2]))
 
 	while 1:
 		for i_batch in range(batch_size):

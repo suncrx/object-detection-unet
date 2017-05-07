@@ -1,4 +1,5 @@
 data/*
 .DS_Store
+model.ckpt
 
 !data/.keep_me

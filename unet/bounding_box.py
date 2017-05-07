@@ -22,7 +22,6 @@ class ImageFactory(object):
 			self.bounding_boxes.append(BoundingBox(row[1]['xmin'], row[1]['xmax'], row[1]['ymin'], row[1]['ymax'], row[1]['label']))
 
 	def image(self, augment=False, trans_range=20, scale_range=20, size=(640,300)):
-		print(self.image_file)
 		image, bounding_boxes = image_bounding_boxes(self.image_file, self.bounding_boxes, augment, trans_range, scale_range, size)
 		return Image(self.image_file, image, bounding_boxes)
 
@@ -41,13 +40,13 @@ class Image(object):
 		'biker': 4
 		}
 
-		image_mask = np.zeros((5, self.image.shape[0], self.image.shape[1], 1))
+		image_mask = np.zeros((self.image.shape[0], self.image.shape[1], 5))
 
 		for i in range(len(self.bounding_boxes)):
 			bb = self.bounding_boxes[i]
 			if labels[bb.label] is not None:
 				mask_index = labels[bb.label]
-				image_mask[mask_index, bb.xmin:bb.xmax, bb.ymin:bb.ymax, 0] = 1.
+				image_mask[bb.xmin:bb.xmax, bb.ymin:bb.ymax, mask_index] = 1.
 
 		return image_mask
 

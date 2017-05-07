@@ -38,13 +38,16 @@ def train_model(batch_size, model_filepath, csv_filepath, min_delta, patience, t
 
 	print("Compiled model!")
 
+	print(model.summary())
+
+
 	model.fit_generator(train_generator, 
 		steps_per_epoch=train_size, 
 		epochs=epochs,
 		callbacks=[checkpoint, earlystop, logger], 
 		validation_data=test_generator, 
 		validation_steps=validation_size,
-		verbose=0)
+		verbose=1)
 
 flags = tf.app.flags
 FLAGS = flags.FLAGS

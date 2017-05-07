@@ -7,10 +7,6 @@ from keras import backend as K
 
 ### IOU approximation based on http://www.cs.umanitoba.ca/~ywang/papers/isvc16.pdf
 def IOU_calc(y_true, y_pred):
-	print("************")
-	print(K.shape(y_true))
-	print(K.shape(y_pred))
-	print("***************")
 	y_true_f = K.flatten(y_true)
 	y_pred_f = K.flatten(y_pred)
 	intersection = y_true_f * y_pred_f
@@ -18,7 +14,7 @@ def IOU_calc(y_true, y_pred):
 	return K.sum(intersection)/K.sum(union)
 
 def IOU_calc_loss(y_true, y_pred):
-	return -IOU_calc(y_true, y_pred)
+	return 1.0 - IOU_calc(y_true, y_pred)
 
 ### Defining a small Unet
 def unet_model(img_shape, segments):
@@ -66,8 +62,6 @@ def unet_model(img_shape, segments):
 	return model
 
 def unet_test_model(img_shape, segments):
-	print(img_shape)
-	print(segments)
 	inputs = Input(img_shape)
 	inputs_norm = Lambda(lambda x: x/127.5 - 1.)(inputs)
 	conv10 = Convolution2D(segments, (1, 1), activation='sigmoid')(inputs_norm)

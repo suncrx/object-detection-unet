@@ -1,5 +1,6 @@
 data/*
 .DS_Store
 model.ckpt
+unet/__pycache__/
 
 !data/.keep_me

@@ -11,9 +11,9 @@ import threading
 import glob
 import tarfile
 
-# Get full path to a resource underneath this project (CarND-Behavioral-Cloning)
+# Get full path to a resource underneath this project
 def full_path(name):
-    base_dir_name = "steering-angle-predictor"
+    base_dir_name = "object-detection-unet"
     base_dir_list = os.getcwd().split("/")
     i = base_dir_list.index(base_dir_name)
     return "/".join(base_dir_list[0:i+1]) + "/" + name
@@ -21,7 +21,7 @@ def full_path(name):
 # Save and fetch data and saved models from S3. Useful for working between AWS and local machine.
 
 bucket_name = 'kd-carnd'
-key_name = 'steering-angle-predictor/'
+key_name = 'object-detection-unet/'
 region_name = 'us-east-2'
 
 def upload_s3(rel_path):
@@ -36,10 +36,6 @@ def download_s3(rel_path):
 	print("Downloading file", rel_path)
 	bucket.download_file(key_name + rel_path, full_path(rel_path), Callback=DownloadProgressPercentage(rel_path))
 	print("Finished downloading file", rel_path)
-
-def download_bottleneck_features():
-  for i in [1,2,4,5,6]:
-    download_s3("bottleneck_data/HMB_{}.p".format(i))
 
 class UploadProgressPercentage(object):
   def __init__(self, filename):
@@ -161,7 +157,6 @@ def zip_upload(folder):
 
 def download_unzip(zipfile):
   download_s3(zipfile)
-
   unzip_data(zipfile, full_path(""))
 
 

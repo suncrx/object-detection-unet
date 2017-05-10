@@ -95,7 +95,9 @@ def unzip_data(zip_file_name, location):
 
 def untar_data(tar_file_name):
   with tarfile.open(tar_file_name, 'r:gz') as in_file:
+    print("Untaring", tar_file_name)
     in_file.extractall()
+  print("Done untaring", tar_file_name)
 
 def zipdir(path, ziph):
   # ziph is zipfile handle

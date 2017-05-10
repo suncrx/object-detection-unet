@@ -73,6 +73,8 @@ def main(_):
 		FLAGS.epochs, 
 		FLAGS.is_test)
 
+	print("Done training!")
+
 	if FLAGS.is_test is False and FLAGS.stop:
 		stop_instance()
 

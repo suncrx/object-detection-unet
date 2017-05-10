@@ -37,7 +37,7 @@ def dataframe():
 def generator(image_factories, batch_size):
 	image_obj = image_factories[0].image()
 	image = image_obj.image
-	mask = image_obj.image_mask()
+	mask = image_obj.image_mask
 	batch_images = np.zeros((batch_size, image.shape[0], image.shape[1], image.shape[2]))
 	batch_masks = np.zeros((batch_size, mask.shape[0], mask.shape[1], mask.shape[2]))
 
@@ -46,25 +46,33 @@ def generator(image_factories, batch_size):
 			i_line = np.random.randint(len(image_factories))
 			image_obj = image_factories[i_line].image(augment=True, trans_range=50, scale_range=50)
 			batch_images[i_batch] = image_obj.image
-			batch_masks[i_batch] = image_obj.image_mask()
+			batch_masks[i_batch] = image_obj.image_mask
 
 		yield batch_images, batch_masks
-			
-def train_test_generator(df, batch_size, test_size, is_test):
+
+def image_factories(df, count=None):
 	image_factories = []
 
 	unique = df.frame.unique()
-	if is_test:
-		count = 100
-	else:
-		count = unique.shape[1]
+	if count is None:
+		count = unique.shape[0]
 
 	for i in range(count):
 		frame = unique[i]
 		matching_frames = df[df.frame.isin([frame])]
 		image_factories.append(ImageFactory(matching_frames))
 
-	train, test = train_test_split(image_factories, test_size = test_size)
+	return np.array(image_factories)
+			
+def train_test_generator(df, batch_size, test_size, is_test):
+	if is_test:
+		count = 100
+	else:
+		count = None
+
+	images = image_factories(df, count)
+
+	train, test = train_test_split(images, test_size = test_size)
 
 	return generator(train, batch_size), generator(test, batch_size), len(train), len(test)
 

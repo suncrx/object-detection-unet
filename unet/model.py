@@ -65,5 +65,6 @@ def unet_test_model(img_shape, segments):
 	inputs = Input(img_shape)
 	inputs_norm = Lambda(lambda x: x/127.5 - 1.)(inputs)
 	conv10 = Convolution2D(segments, (1, 1), activation='sigmoid')(inputs_norm)
+	conv10.trainable = False
 	model = Model(input=inputs, output=conv10)
 	return model

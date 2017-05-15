@@ -2,7 +2,8 @@
 
 import numpy as np 
 from keras.models import Model
-from keras.layers import Input, merge, Convolution2D, MaxPooling2D, UpSampling2D, Lambda, ZeroPadding2D
+from keras.layers import Input, Convolution2D, MaxPooling2D, UpSampling2D, Lambda, ZeroPadding2D
+from keras.layers.merge import concatenate
 from keras import backend as K
 
 ### IOU approximation based on http://www.cs.umanitoba.ca/~ywang/papers/isvc16.pdf
@@ -39,19 +40,19 @@ def unet_model(img_shape, segments):
 	conv5 = Convolution2D(128, (3, 3), activation='relu', padding='same')(pool4)
 	conv5 = Convolution2D(128, (3, 3), activation='relu', padding='same')(conv5)
 
-	up6 = merge([UpSampling2D(size=(2,2))(conv5), conv4], mode='concat', concat_axis=3)
+	up6 = concatenate([UpSampling2D(size=(2,2))(conv5), conv4], axis=3)
 	conv6 = Convolution2D(64, (3, 3), activation='relu', padding='same')(up6)
 	conv6 = Convolution2D(64, (3, 3), activation='relu', padding='same')(conv6)
 
-	up7 = merge([UpSampling2D(size=(2, 2))(conv6), conv3], mode='concat', concat_axis=3)
+	up7 = concatenate([UpSampling2D(size=(2, 2))(conv6), conv3], axis=3)
 	conv7 = Convolution2D(32, (3, 3), activation='relu', padding='same')(up7)
 	conv7 = Convolution2D(32, (3, 3), activation='relu', padding='same')(conv7)
 
-	up8 = merge([UpSampling2D(size=(2, 2))(conv7), conv2], mode='concat', concat_axis=3)
+	up8 = concatenate([UpSampling2D(size=(2, 2))(conv7), conv2], axis=3)
 	conv8 = Convolution2D(16, (3, 3), activation='relu', padding='same')(up8)
 	conv8 = Convolution2D(16, (3, 3), activation='relu', padding='same')(conv8)
 
-	up9 = merge([UpSampling2D(size=(2, 2))(conv8), conv1], mode='concat', concat_axis=3)
+	up9 = concatenate([UpSampling2D(size=(2, 2))(conv8), conv1], axis=3)
 	conv9 = Convolution2D(8, (3, 3), activation='relu', padding='same')(up9)
 	conv9 = Convolution2D(8, (3, 3), activation='relu', padding='same')(conv9)
 

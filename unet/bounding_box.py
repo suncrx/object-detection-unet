@@ -21,7 +21,7 @@ class ImageFactory(object):
 		for row in bounding_boxes.iterrows():
 			self.bounding_boxes.append(BoundingBox(row[1]['xmin'], row[1]['xmax'], row[1]['ymin'], row[1]['ymax'], row[1]['label']))
 
-	def image(self, augment=False, trans_range=20, scale_range=20, size=(576,360)):
+	def image(self, augment=False, trans_range=20, scale_range=20, size=(640,400)):
 		image, bounding_boxes = image_bounding_boxes(self.image_file, self.bounding_boxes, augment, trans_range, scale_range, size)
 		return Image(self.image_file, image, bounding_boxes)
 
@@ -32,7 +32,7 @@ class Image(object):
 		self.bounding_boxes = bounding_boxes
 		self.image_mask = create_image_mask(bounding_boxes, image.shape)
 
-def image_bounding_boxes(image_file, bounding_boxes, augment=False, trans_range=20, scale_range=20, size=(576,360)):
+def image_bounding_boxes(image_file, bounding_boxes, augment=False, trans_range=20, scale_range=20, size=(640,400)):
 	img = cv2.imread(full_path(image_file))
 	img_size = np.shape(img)
 	img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)

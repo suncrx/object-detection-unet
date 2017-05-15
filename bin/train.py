@@ -46,7 +46,7 @@ def train_model(batch_size, model_filepath, csv_filepath, min_delta, patience, t
 		callbacks=[checkpoint, earlystop, logger], 
 		validation_data=test_generator, 
 		validation_steps=validation_size,
-		verbose=0)
+		verbose=2)
 
 flags = tf.app.flags
 FLAGS = flags.FLAGS
